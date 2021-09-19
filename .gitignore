@@ -1,0 +1,5 @@
+#игнорировать все кроме src и pom.xml
+.idea/*
+target/*
+pingServerApp1.iml
+README.md
