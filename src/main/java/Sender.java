@@ -1,43 +1,50 @@
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.Scanner;
-import java.util.ArrayList;
+import java.net.*;
+import java.util.*;
+import java.io.IOException;
 
 public class Sender {
 
-    public static void handleIPArray(Scanner scan) throws Exception {
+    public static void handleAddresses(Scanner scan) throws Exception {
         ArrayList<String> list = new ArrayList<String>();
 
-        while (scan.hasNext()){
+        while (scan.hasNext()) {
             list.add(scan.next());
         }
         scan.close();
-        for (int i = 0; i < list.size(); i++){
-            String ipAddress = list.get(i);
-            Sender.sendPingRequest(ipAddress);
+        for (int i = 0; i < list.size(); i++) {
+            String url = list.get(i);
+            Sender.handleRequest(url);
         }
     }
 
-    private static void sendPingRequest(String ipAddress) throws Exception {
-        InetAddress inetAddress = InetAddress.getByName(ipAddress);
+    private static void handleRequest(String url) throws Exception {
+        URL myUrl = new URL(url);
         int countTryConnet = 0;
 
-        System.out.println("Sending Ping Request to " + ipAddress);
+        HttpURLConnection myUrlCon = (HttpURLConnection) myUrl.openConnection();
+        int statusCode = myUrlCon.getResponseCode();
+
         while (countTryConnet < 10) {
             try {
-                if (inetAddress.isReachable(5000)) {
-                    System.out.println("Host "+ipAddress+" is available");
+                if (statusCode == 200) {
+                    System.out.println("Host: " + url + " is avalable, response code: " + statusCode);
                     break;
                 } else {
                     countTryConnet++;
-                    System.out.println(countTryConnet);
+                    System.out.println("Try to connect host...");
                 }
-            } catch (UnknownHostException e) {
-                e.printStackTrace();
+            } finally {
+                if (statusCode != 200 & countTryConnet == 10){
+                    System.out.println("Host: " + url + " is not avalable, response code: " + statusCode);
             }
         }
-        if (countTryConnet == 10){
-            System.out.println("Sorry ! Host "+ipAddress+" is not available. Check please");
         }
     }
 }
+
+
+
+
+
+
+
