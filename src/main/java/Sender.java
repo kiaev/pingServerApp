@@ -17,27 +17,26 @@ public class Sender {
         }
     }
 
-    private static void handleRequest(String url) throws Exception {
+    private static boolean handleRequest(String url) throws MalformedURLException {
         URL myUrl = new URL(url);
-        int countTryConnet = 0;
 
-        HttpURLConnection myUrlCon = (HttpURLConnection) myUrl.openConnection();
-        int statusCode = myUrlCon.getResponseCode();
-
-        while (countTryConnet < 10) {
-            try {
-                if (statusCode == 200) {
-                    System.out.println("Host: " + url + " is avalable, response code: " + statusCode);
-                    break;
-                } else {
-                    countTryConnet++;
-                    System.out.println("Try to connect host...");
-                }
-            } finally {
-                if (statusCode != 200 & countTryConnet == 10){
-                    System.out.println("Host: " + url + " is not avalable, response code: " + statusCode);
+        try {
+            HttpURLConnection myUrlCon = (HttpURLConnection) myUrl.openConnection();
+            myUrlCon.setConnectTimeout(5000);
+            myUrlCon.setReadTimeout(5000);
+            myUrlCon.setRequestMethod("HEAD");
+            int responseCode = myUrlCon.getResponseCode();
+            
+            if (responseCode == 200) {
+                System.out.println("Host: " + url + " is available, response code: " + responseCode);
+                return true;
+            } else  {
+                System.out.println("Host: " + url + " is not available, response code: " + responseCode);
+                return true;
             }
-        }
+        } catch (IOException exception) {
+            System.out.println("Host: " + url + "Catch IOException, please check correctness of the input  host name");
+            return false;
         }
     }
 }
@@ -46,5 +45,15 @@ public class Sender {
 
 
 
+
+
+/*
+
+
+
+finally {
+                if (statusCode != 200 & countTryConnet == 10){
+                    System.out.println("Host: " + url + " is not avalable, response code: " + statusCode);
+*/
 
 
