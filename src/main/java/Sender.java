@@ -39,10 +39,10 @@ public class Sender {
             System.out.println("Bad URL: " + url);
             return false;
         } catch (UnknownHostException e){
-            System.out.println("Host: "+url+" is unknown");
+            System.out.println("Host: " + url + " is unknown");
             return false;
         } catch (IOException e) {
-            System.out.println("Host: " +url+ " Catch IOException, please check correctness of the input host name");
+            System.out.println("Host: " + url + " Catch IOException, please check correctness of the input host name");
             return false;
         }
     }
