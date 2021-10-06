@@ -8,6 +8,7 @@ public class Sender {
 
     public static void handleAddresses(Scanner scan) throws Exception {
         ArrayList<String> list = new ArrayList<String>();
+        checkNull(scan);
 
         while (scan.hasNext()) {
             list.add(scan.next());
@@ -16,6 +17,12 @@ public class Sender {
         for (int i = 0; i < list.size(); i++) {
             String url = list.get(i);
             Sender.handleRequest(url);
+        }
+    }
+
+    private static void checkNull (Scanner scan) {
+        if  (scan == null){
+            throw new IllegalArgumentException("The string value must not be null");
         }
     }
 
